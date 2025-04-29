@@ -39,18 +39,18 @@ uv pip install git+https://github.com/yourusername/aliaser.git
 # Or install locally after cloning
 git clone https://github.com/yourusername/aliaser.git
 cd aliaser
-uv pip install .
+uv sync
 ```
 
 ### From Source with Development Dependencies
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/aliaser.git
+git clone https://github.com/bruno-borges-2001/aliaser.git
 cd aliaser
 
 # Install with dev dependencies
-uv pip install -e ".[dev]"
+uv sync
 
 # Install pre-commit hooks
 pre-commit install
@@ -117,17 +117,10 @@ source ~/.config/fish/config.fish
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/aliaser.git
+git clone https://github.com/bruno-borges-2001/aliaser.git
 cd aliaser
 
-# Create and activate the virtual environment
-uv venv
-source .venv/bin/activate  # On Unix/macOS
-# or
-# .venv\Scripts\activate  # On Windows
-
-# Install development dependencies
-uv pip install -e ".[dev]"
+uv sync
 
 # Install pre-commit hooks
 pre-commit install
@@ -139,7 +132,7 @@ We use a Makefile to simplify common development tasks:
 
 ```bash
 # Install the package in development mode
-make install-dev
+make install
 
 # Run tests
 make test
@@ -165,7 +158,8 @@ aliaser/
 │   ├── __init__.py
 │   ├── main.py         # Typer app entry point
 │   ├── shell.py        # Shell detection & editing
-│   └── utils.py        # Helper functions
+│   ├── utils.py        # Helper functions
+│   └── logger.py       # Logging configuration
 ├── tests/              # Test suite
 │   ├── __init__.py
 │   ├── test_main.py
@@ -175,7 +169,10 @@ aliaser/
 ├── .pre-commit-config.yaml  # Pre-commit hooks
 ├── Makefile            # Development automation
 ├── README.md           # This file
-└── LICENSE             # MIT License
+├── LICENSE             # MIT License
+├── .gitignore          # Git ignore rules
+├── uv.lock             # Dependency lock file
+└── .coverage           # Test coverage data
 ```
 
 ## 📋 Testing
