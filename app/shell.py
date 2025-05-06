@@ -5,6 +5,7 @@ This module provides functions for detecting the current shell,
 managing shell configuration files, and handling aliases.
 """
 
+import os
 import re
 from pathlib import Path
 
@@ -499,3 +500,20 @@ def is_valid_alias_name(alias: str) -> bool:
         return False
 
     return True
+
+
+def run_shell_command(command: str) -> None:
+    """
+    Run a shell command.
+    """
+    shell_name = detect_shell()
+
+    match shell_name:
+        case "zsh":
+            os.system(f"zsh -c '{command}'")
+        case "bash":
+            os.system(f"bash -c '{command}'")
+        case "fish":
+            os.system(f"fish -c '{command}'")
+        case _:
+            raise RuntimeError(f"Unsupported shell: {shell_name}")

@@ -4,7 +4,6 @@ Aliaser - A command-line tool for managing shell aliases.
 This module contains the main CLI implementation using Typer.
 """
 
-import os
 import sys
 from pathlib import Path
 from typing import Any
@@ -14,12 +13,13 @@ import typer
 from app.logger import LogLevel, log, log_table
 from app.shell import (
     detect_shell,
-    get_shell_config_path,
-    add_alias_to_shell,
-    remove_alias_from_shell,
-    update_alias_in_shell,
     get_all_aliases,
+    run_shell_command,
+    add_alias_to_shell,
     is_valid_alias_name,
+    update_alias_in_shell,
+    get_shell_config_path,
+    remove_alias_from_shell,
 )
 
 # Create Typer app instance
@@ -71,7 +71,7 @@ def create_alias(
                     LogLevel.INFO,
                 )
             else:
-                os.system(f"source {config_path}")
+                run_shell_command(f"source {config_path}")
         else:
             # Alias already exists
             log(
@@ -142,7 +142,7 @@ def delete_alias(
                     LogLevel.INFO,
                 )
             else:
-                os.system(f"source {config_path}")
+                run_shell_command(f"source {config_path}")
         else:
             log(
                 f"Alias '[bold]{alias}[/bold]' not found.",
@@ -182,7 +182,7 @@ def update_alias(
                     LogLevel.INFO,
                 )
             else:
-                os.system(f"source {config_path}")
+                run_shell_command(f"source {config_path}")
         else:
             log(
                 f"Alias '[bold]{alias}[/bold]' not found.",
@@ -355,8 +355,24 @@ def clear_aliases(
                 LogLevel.INFO,
             )
         else:
-            os.system(f"source {config_path}")
+            run_shell_command(f"source {config_path}")
 
+    except Exception as e:
+        log(str(e), LogLevel.ERROR)
+        sys.exit(1)
+
+
+@app.command("source")
+def source_aliases() -> None:
+    """
+    Source the aliases file.
+    """
+    try:
+        # Detect the shell and get config path
+        shell_name = detect_shell()
+        config_path = get_shell_config_path(shell_name)
+
+        run_shell_command(f"source {config_path}")
     except Exception as e:
         log(str(e), LogLevel.ERROR)
         sys.exit(1)
